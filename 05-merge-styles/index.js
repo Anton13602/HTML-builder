@@ -12,7 +12,7 @@ async function mergeFiles() {
 
   const readCss = await readdir(urlReadCss, {withFileTypes: true});
   for (let cssFile of readCss) {
-    if (cssFile.isFile() && cssFile.name.includes('css')) {
+    if (cssFile.isFile() && path.extname(cssFile.name) === '.css') {
       const urlFileCss = path.join(urlReadCss, cssFile.name);
       const stream = fs.createReadStream(urlFileCss, {encoding: 'utf-8'});
       stream.on('data', (data) => {
