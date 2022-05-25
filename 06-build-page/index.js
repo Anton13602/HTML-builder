@@ -13,7 +13,7 @@ async function buildPage() {
   
   const readCopyFiles = await readdir(urlCopyFile);
   for (let copyFile of readCopyFiles) {
-    await rm(path.join(urlCopyFile, copyFile), {recursive: true});
+    await rm(path.join(urlCopyFile, copyFile), {recursive: true, force: true});
   } 
 
   
@@ -42,7 +42,7 @@ async function buildPage() {
       if (!file.isFile()) {
         const resultCopyUrl = path.join(urlCopyFile, 'assets', file.name);
         await mkdir(path.join(resultCopyUrl), {recursive: true});
-        readAssets(path.join(urlFiles, file.name), resultCopyUrl);
+        readAssets(path.join(url, file.name), resultCopyUrl);
       } else {
         await copyFile (path.join(url, file.name), path.join(copyUrl, file.name));
       }
@@ -56,7 +56,7 @@ async function buildPage() {
   
   const readCss = await readdir(urlReadCss, {withFileTypes: true});
   for (let cssFile of readCss) {
-    if (cssFile.isFile() && cssFile.name.includes('css')) {
+    if (cssFile.isFile() && path.extname(cssFile.name) === '.css') {
       const urlFileCss = path.join(urlReadCss, cssFile.name);
       const stream = fs.createReadStream(urlFileCss, {encoding: 'utf-8'});
       stream.on('data', (data) => {
